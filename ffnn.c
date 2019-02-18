@@ -104,7 +104,9 @@ float error(ffnn* self, uint32_t nSamples, float** inputs, float** outputs) {
     for(uint32_t i = 0; i < nSamples; i++) {
         predict(self, inputs[i], actual);
         for(uint32_t j = 0; j < outSize; j++) {
-            err += powf(outputs[i][j] - actual[j], 2);
+            float sampleErr = powf(outputs[i][j] - actual[j], 2);
+            if (sampleErr > 0.01f * outSize)
+                err += sampleErr/nSamples;
         }
     }
     free(actual);
